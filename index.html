@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ======= OGP ======= -->
+  <title>AIで稼いだお金の話をしよう</title>
+  <meta name="description" content="正直に話します。AIで稼いだこと、使ったこと、全部。" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://YOUR_DOMAIN_HERE/" />
+  <meta property="og:title" content="AIで稼いだお金の話をしよう" />
+  <meta property="og:description" content="正直に話します。AIで稼いだこと、使ったこと、全部。" />
+  <meta property="og:image" content="https://YOUR_DOMAIN_HERE/ogp.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="ja_JP" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AIで稼いだお金の話をしよう" />
+  <meta name="twitter:description" content="正直に話します。AIで稼いだこと、使ったこと、全部。" />
+  <meta name="twitter:image" content="https://YOUR_DOMAIN_HERE/ogp.png" />
+  <!-- ================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a08;
+      --gold: #c9a84c;
+      --gold-light: #f0d080;
+      --white: #f5f0e8;
+      --gray: #555;
+    }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Noto Serif JP', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    /* 背景ノイズ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* 放射状グラデーション */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.08) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      max-width: 680px;
+    }
+    .label {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.3em;
+      font-size: clamp(0.65rem, 2vw, 0.8rem);
+      color: var(--gold);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    h1 {
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+    h1 span {
+      color: var(--gold-light);
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .sub {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      color: rgba(245,240,232,0.55);
+      line-height: 1.9;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+    .countdown-wrap {
+      opacity: 0;
+      animation: fadeUp 0.8s 1.3s forwards;
+    }
+    .countdown-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gray);
+      margin-bottom: 0.75rem;
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    .ring {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .ring svg {
+      transform: rotate(-90deg);
+    }
+    .ring-track {
+      fill: none;
+      stroke: rgba(201,168,76,0.15);
+      stroke-width: 3;
+    }
+    .ring-fill {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+    .ring-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold-light);
+    }
+    .skip {
+      font-size: 0.75rem;
+      color: var(--gray);
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .skip:hover { color: var(--gold); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <p class="label">MONEY × AI — PERSONAL NOTE</p>
+  <h1>AIで稼いだ<br /><span>お金の話</span>をしよう</h1>
+  <div class="divider"></div>
+  <p class="sub">
+    正直に話します。<br />
+    AIで稼いだこと、使ったこと、全部。<br />
+    でも、その前にひとつだけ頼みがある。
+  </p>
+  <div class="countdown-wrap">
+    <p class="countdown-label">REDIRECTING IN</p>
+    <div class="ring">
+      <svg viewBox="0 0 80 80" width="80" height="80">
+        <circle class="ring-track" cx="40" cy="40" r="35"/>
+        <circle class="ring-fill" id="ringFill" cx="40" cy="40" r="35"/>
+      </svg>
+      <div class="ring-num" id="num">5</div>
+    </div>
+    <p class="skip" onclick="go()">今すぐ見る →</p>
+  </div>
+</div>
+<script>
+  const TARGET = 'https://yahoo.jp/HV_Kdu';
+  const TOTAL = 5;
+  const circumference = 2 * Math.PI * 35; // ~220
+  const ring = document.getElementById('ringFill');
+  const num = document.getElementById('num');
+  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDashoffset = 0;
+  let remaining = TOTAL;
+  function go() {
+    window.location.href = TARGET;
+  }
+  // 1秒遅延後にカウントダウン開始（アニメーション後）
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      remaining--;
+      num.textContent = remaining;
+      const offset = circumference * (remaining / TOTAL);
+      ring.style.strokeDashoffset = circumference - offset;
+      if (remaining <= 0) {
+        clearInterval(interval);
+        go();
+      }
+    }, 1000);
+  }, 1500);
+</script>
+</body>
+</html>
